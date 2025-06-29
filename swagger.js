@@ -112,4 +112,5 @@ function startServer() {
     if (process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_HEADERS !== undefined) {
       response.append(
         'Access-Control-Allow-Headers',
-        process.env.A
+        process.env.A);
+
