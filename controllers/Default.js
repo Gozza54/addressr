@@ -1,9 +1,9 @@
-// import debug from 'debug';
-import { getApiRoot as _getApiRoot } from '../service/DefaultService';
-import { writeJson } from '../utils/writer.js';
-// var logger = debug('api');
+// const debug = require('debug');
+const { getApiRoot: _getApiRoot } = require('../service/DefaultService');
+const { writeJson } = require('../utils/writer.js');
+// const logger = debug('api');
 
-export function getApiRoot(request, res) {
+function getApiRoot(request, res) {
   _getApiRoot()
     .then(function (response) {
       res.setHeader('link', response.link.toString());
@@ -14,3 +14,7 @@ export function getApiRoot(request, res) {
       writeJson(res, error.body);
     });
 }
+
+module.exports = {
+  getApiRoot
+};

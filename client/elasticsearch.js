@@ -1,17 +1,17 @@
-const waitPort = require('wait-port')
+const waitport = require ('wait-port')
 const elasticsearch = require('@opensearch-project/opensearch')
-import debug from 'debug'
+const debug = require ('debug')
 const logger = debug('api')
 const error = debug('error')
 
 const ES_INDEX_NAME = process.env.ES_INDEX_NAME || 'addressr'
-export const ELASTIC_PORT = Number.parseInt(process.env.ELASTIC_PORT || '9200')
+const ELASTIC_PORT = Number.parseInt(process.env.ELASTIC_PORT || '9200')
 const ELASTIC_HOST = process.env.ELASTIC_HOST || '127.0.0.1'
 const ELASTIC_USERNAME = process.env.ELASTIC_USERNAME || undefined
 const ELASTIC_PASSWORD = process.env.ELASTIC_PASSWORD || undefined
 const ELASTIC_PROTOCOL = process.env.ELASTIC_PROTOCOL || 'http'
 
-export async function dropIndex(esClient) {
+ async function dropIndex(esClient) {
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   let exists = await esClient.indices.exists({ index: ES_INDEX_NAME })
   if (exists.body) {
@@ -25,8 +25,10 @@ export async function dropIndex(esClient) {
   exists = await esClient.indices.exists({ index: ES_INDEX_NAME })
   logger('index exists:', exists)
 }
-
-export async function initIndex(esClient, clear, synonyms) {
+module.exports = {
+  dropIndex,
+};
+async function initIndex(esClient, clear, synonyms) {
   if (clear) {
     await dropIndex(esClient)
   }

@@ -1,14 +1,15 @@
-import debug from 'debug';
-import {
-  getAddress as _getAddress,
-  getAddresses as _getAddresses,
-} from '../service/address-service';
-import { writeJson } from '../utils/writer.js';
-var logger = debug('api');
+const debug = require('debug');
+const {
+  getAddress: _getAddress,
+  getAddresses: _getAddresses,
+} = require('../service/address-service.js'); // ✅ fixed missing parenthesis
+const { writeJson } = require('../utils/writer.js');
 
-export function getAddress(request, response) {
+const logger = debug('api');
+
+function getAddress(request, response) {
   logger('IN getAddress');
-  var addressId = request.swagger.params['addressId'].value;
+  const addressId = request.swagger.params['addressId'].value;
   _getAddress(addressId).then(function (addressResponse) {
     if (addressResponse.statusCode) {
       response.setHeader('Content-Type', 'application/json');
@@ -22,13 +23,14 @@ export function getAddress(request, response) {
   });
 }
 
-export function getAddresses(request, response) {
-  var q = request.swagger.params['q'].value;
-  var p = request.swagger.params['p'].value;
+function getAddresses(request, response) {
+  const q = request.swagger.params['q'].value;
+  const p = request.swagger.params['p'].value;
   const url = new URL(
     request.url,
     `http://localhost:${process.env.port || 8080}`
   );
+
   _getAddresses(url.pathname, request.swagger, q, p).then(function (
     addressesResponse
   ) {
@@ -47,3 +49,9 @@ export function getAddresses(request, response) {
     return;
   });
 }
+
+// ✅ Export CommonJS style
+module.exports = {
+  getAddress,
+  getAddresses,
+};
