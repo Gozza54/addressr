@@ -109,11 +109,13 @@ function startServer() {
         process.env.ADDRESSR_ACCESS_CONTROL_EXPOSE_HEADERS
       );
     }
-    if (process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_HEADERS !== undefined) {
-      response.append(
-        const headers = [
-                        'Access-Control-Allow-Headers',
-                         process.env.ALLOWED_HEADERS || 'Origin, X-Requested-With, Content-Type, Accept'
-];
+      if (process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_HEADERS !== undefined) {
+  const headers = [
+    'Access-Control-Allow-Headers',
+    process.env.ALLOWED_HEADERS || 'Origin, X-Requested-With, Content-Type, Accept'
+  ];
+  response.append(...headers);
+}
+
 
 
