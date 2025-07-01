@@ -16,7 +16,7 @@ error.log = console.error.bind(console);
 const options = {
   swaggerUi: pathUtil.join(__dirname, '/swagger.json'),
   controllers: pathUtil.join(__dirname, './controllers'),
-  useStubs: process.env.NODE_ENV === 'development'
+  useStubs: process.env.NODE_ENV === 'development',
 };
 
 // Load and parse swagger.yaml
@@ -32,7 +32,7 @@ function swaggerInit() {
       app.use(
         middleware.swaggerValidator({
           validateResponse:
-            !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+            !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
         })
       );
 
@@ -45,10 +45,16 @@ function swaggerInit() {
           const errorPayload = {
             message: err.message,
             errors: err.results?.errors || [],
-            originalResponse: err.originalResponse ? JSON.parse(err.originalResponse) : undefined
+            originalResponse: err.originalResponse
+              ? JSON.parse(err.originalResponse)
+              : undefined,
           };
           error('Validation Error:', JSON.stringify(errorPayload, null, 2));
-          res.status(err.code === 'SCHEMA_VALIDATION_FAILED' ? 500 : 400).json(errorPayload);
+          res
+            .status(
+              err.code === 'SCHEMA_VALIDATION_FAILED' ? 500 : 400
+            )
+            .json(errorPayload);
         } else {
           next();
         }
@@ -63,29 +69,6 @@ function swaggerInit() {
 
 let server;
 
-function startServer() {
+async function startServer() {
   // CORS Headers
-  app.use((req, res, next) => {
-    if (process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_ORIGIN) {
-      res.setHeader('Access-Control-Allow-Origin', process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_ORIGIN);
-    }
-    if (process.env.ADDRESSR_ACCESS_CONTROL_EXPOSE_HEADERS) {
-      res.setHeader('Access-Control-Expose-Headers', process.env.ADDRESSR_ACCESS_CONTROL_EXPOSE_HEADERS);
-    }
-    if (process.env.ADDRESSR_ACCESS_CONTROL_ALLOW_HEADERS || process.env.ALLOWED_HEADERS) {
-      res.setHeader(
-        'Access-Control-Allow-Headers',
-        process.env.ALLOWED_HEADERS || 'Origin, X-Requested-With, Content-Type, Accept'
-      );
-    }
-    next();
-  });
-
-  server = createServer(app);
-  server.listen(serverPort, () => {
-    logger(`Server started on port ${serverPort}`);
-  });
-}
-
-// Start it up
-swaggerInit().then(startServer);
+  a
